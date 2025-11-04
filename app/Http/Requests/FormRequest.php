@@ -27,4 +27,5 @@ class FormRequest extends FormRequest
             'password'=>'required|unique:user|confirmed',
         ];
     }
+    protected $stopOnFirstFailure = true; 
 }

@@ -83,7 +83,7 @@
             @csrf
             <div class="mb-3">
                 <label for="regName" class="form-label">Name</label>
-                <input type="text" class="form-control" value="{{old('name')}}" @error('name')is-invalide @enderror name="name" id="regName" placeholder="Your full name" >
+                <input type="text" class="form-control" value="{{old('name')}}" @error('name')is-invalid @enderror name="name" id="regName" placeholder="Your full name" >
                <span class="text-danger small">
                  @error('name')
                     {{$message}}
@@ -92,7 +92,7 @@
             </div>
             <div class="mb-3">
                 <label for="regEmail" class="form-label">Email address</label>
-                <input type="email" class="form-control" value="{{old('email')}}" @error('email')is-invalide @enderror name="email" id="regEmail" placeholder="name@example.com" >
+                <input type="email" class="form-control" value="{{old('email')}}" @error('email')is-invalid @enderror name="email" id="regEmail" placeholder="name@example.com" >
                 <span class="text-danger small">
                  @error('email')
                     {{$message}}
@@ -101,7 +101,7 @@
             </div>
             <div class="mb-3">
                 <label for="regPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" value="{{old('password')}}"   name="password" @error('password')is-invalide @enderror id="regPassword" placeholder="Minimum 6 characters">
+                <input type="password" class="form-control" value="{{old('password')}}" name="password" @error('password')is-invalid @enderror id="regPassword" placeholder="Minimum 6 characters">
                 <span class="text-danger small">
                  @error('password')
                     {{$message}}
@@ -110,7 +110,7 @@
             </div>
             <div class="mb-4">
                 <label for="regConfirmPassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" value="{{old('password')}}" name="password_confirmation" @error('password') is-invalide @enderror id="regConfirmPassword" placeholder="Re-enter password" >
+                <input type="password" class="form-control" value="{{old('password')}}" name="password_confirmation" @error('password') is-invalid @enderror id="regConfirmPassword" placeholder="Re-enter password" >
                 <span class="text-danger small">
                  @error('password')
                     {{$message}}

@@ -15,6 +15,8 @@
             justify-content: center;
             align-items: center;
             font-family: 'Arial', sans-serif;
+            /* Padding is no longer necessary as the alert is in the corner */
+            /* padding-top: 60px; */ 
         }
         .auth-card {
             max-width: 450px;
@@ -62,9 +64,65 @@
             margin-bottom: 1.5rem;
             text-align: center;
         }
+        
+        /* Style for the session alert - MOVED TO TOP-RIGHT */
+        .session-alert-container {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem; /* CHANGED to place in the top-right corner */
+            width: auto; /* Set to auto width */
+            max-width: 350px; /* Added max-width */
+            z-index: 1050;
+        }
+
+        /* --- STYLES FOR PROGRESS LINE (CLEANER) --- */
+
+        /* Make room for the progress bar */
+        #session-success-alert {
+            position: relative;
+            /* padding-bottom: 20px; */ /* REMOVED extra padding */
+            overflow: hidden; /* Good for containing pseudo-elements */
+        }
+
+        /* The actual animated line using a pseudo-element */
+        #session-success-alert::after { /* CHANGED to pseudo-element */
+            content: '';
+            position: absolute;
+            bottom: 0; /* Position at the very bottom */
+            left: 0;
+            height: 4px; /* Height of the line */
+            width: 100%;
+            background-color: #0f5132; /* Darker success green */
+            /* This animation shrinks the bar from 100% to 0% over 5s */
+            animation: progress-shrink 5s linear forwards;
+        }
+
+        /* Keyframes for the animation (re-used) */
+        @keyframes progress-shrink {
+            from {
+                width: 100%;
+            }
+            to {
+                width: 0%;
+            }
+        }
+        /* --- END OF NEW STYLES --- */
+
     </style>
 </head>
 <body>
+
+    <!-- Container for the Success Message -->
+    <div class="session-alert-container">
+        <!-- Check if a 'success' session message exists (from Laravel/backend) -->
+        @if (session()->has('success'))
+            <!-- Added id="session-success-alert" to target with JS -->
+            <div id="session-success-alert" class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+    </div>
 
     <div class="auth-card">
 
@@ -75,19 +133,19 @@
             @csrf
             <div class="mb-3">
                 <label for="loginEmail" class="form-label">Email address</label>
-                <input type="email" name="email" value="{{old('email')}}"  class="form-control" id="loginEmail" placeholder="name@example.com" required>
+                <input type="email" name="email" value="{{old('email')}}"  class="form-control" @error('email')is-invalid @enderror id="loginEmail" placeholder="name@example.com" >
                 <span class="text-danger small">
                  @error('email')
-                    {{$message}}
+                     {{$message}}
                 @enderror
                </span>
             </div>
             <div class="mb-4">
                 <label for="loginPassword" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" id="loginPassword" placeholder="Minimum 6 characters" required>
+                <input type="password" name="password" class="form-control" id="loginPassword" @error('password')is-invalid @enderror placeholder="Minimum 6 characters" >
                 <span class="text-danger small">
                  @error('password')
-                    {{$message}}
+                     {{$message}}
                 @enderror
                </span>
             </div>
@@ -104,8 +162,32 @@
         <div id="messageBox" class="alert mt-4 p-3 text-center" role="alert" style="display:none;"></div>
 
     </div>
-
+    
     <!-- Bootstrap JS CDN (Bundle includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- Custom JS for 5-second auto-dismiss -->
+    <script>
+        // Wait for the document to be fully loaded
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Find the success alert by its new ID
+            const successAlert = document.getElementById('session-success-alert');
+            
+            if (successAlert) {
+                // Wait 5 seconds (5000 milliseconds)
+                setTimeout(() => {
+                    // Check if Bootstrap is available before trying to instantiate Alert
+                    if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
+                        // Create a Bootstrap Alert instance to use the 'close' method
+                        const bsAlert = new bootstrap.Alert(successAlert);
+                        bsAlert.close();
+                    } else {
+                        // Fallback: If Bootstrap JS didn't load, just hide it with CSS
+                        successAlert.style.display = 'none';
+                    }
+                }, 5000);
+            }
+        });
+    </script>
 </body>
 </html>

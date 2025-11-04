@@ -9,12 +9,35 @@
     <link href=
 "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
           rel="stylesheet">
+    <style>
+        /* Optional: Add a light border to the header for visual separation */
+        .app-header {
+            border-bottom: 1px solid #dee2e6;
+        }
+        .user-name {
+            font-weight: bold;
+            color: #333; /* Darker color for better visibility */
+        }
+    </style>
 </head>
 
 <body>
-  <div class="m-2">
-    <a href="{{ route('logout')}}" class="btn btn-primary">Logout</a>
-  </div>
+   
+    <nav class="navbar bg-light p-3 app-header">
+        <div class="container-fluid">
+            <!-- LEFT: User Name -->
+            <span class="navbar-text user-name">
+                Welcome, {{Auth::user()->name}} !
+            </span>
+            
+            <!-- RIGHT: Logout Button -->
+            <!-- Use ml-auto or ms-auto (Bootstrap 5) to push it right -->
+            <a href="{{ route('logout')}}" class="btn btn-primary ml-auto">
+                Logout
+            </a>
+        </div>
+    </nav>
+    
     <div class="container mt-5">
         <h1 class="text-center mb-4">To Do List</h1>
         <div class="row justify-content-center">
@@ -27,7 +50,7 @@
                                 <input type="text" name="AddNewTask" class="form-control" id="todo-input" placeholder="Add new task" required>
                                 
                                 <button class="btn btn-primary" type="submit">
-                                      Add
+                                    Add
                                 </button>
                                 
                             </div>

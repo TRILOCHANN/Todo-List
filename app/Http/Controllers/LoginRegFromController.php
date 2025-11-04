@@ -31,7 +31,7 @@ class LoginRegFromController extends Controller
                 'email'=>$request->email,
                 'password'=>$request->password,
         ]);
-        return redirect()->route('loginform');
+        return redirect('/')->with('success','Successfully Registered');
     }
 
     //validation Loin
@@ -56,9 +56,10 @@ class LoginRegFromController extends Controller
     //Store Tasks
     public function storetask(FormRequest $request)
     {
+     
         TodoList::create([
                 'description'=>$request->AddNewTask,
-                //'user_id'=>$request->
+                
         ]);
         return back();
     }
