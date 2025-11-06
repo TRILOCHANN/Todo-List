@@ -1,148 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To Do List</title>
-    <!-- Bootstrap CSS -->
-    <link href=
-"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
-          rel="stylesheet">
-    <style>
-        /* Optional: Add a light border to the header for visual separation */
-        .app-header {
-            border-bottom: 1px solid #dee2e6;
-        }
-        .user-name {
-            font-weight: bold;
-            color: #333; /* Darker color for better visibility */
-        }
-    </style>
-</head>
-
-<body>
-   
-    <nav class="navbar bg-light p-3 app-header">
-        <div class="container-fluid">
-            <!-- LEFT: User Name -->
-            <span class="navbar-text user-name">
-                Welcome, {{Auth::user()->name}} !
-            </span>
-            
-            <!-- RIGHT: Logout Button -->
-            <!-- Use ml-auto or ms-auto (Bootstrap 5) to push it right -->
-            <a href="{{ route('logout')}}" class="btn btn-primary ml-auto">
-                Logout
-            </a>
-        </div>
-    </nav>
-    
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">To Do List</h1>
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('storetask')}}" id="todo-form">
-                            @csrf
-                            <div class="input-group mb-3">
-                                <input type="text" name="AddNewTask" class="form-control" id="todo-input" placeholder="Add new task" required>
-                                
-                                <button class="btn btn-primary" type="submit">
-                                    Add
-                                </button>
-                                
-                            </div>
-                            <span class="text-danger small" style="margin-top:0px;">
-                                    @error('AddNewTask')
-                                        {{$message}}
-                                    @enderror
-                                </span>
-                        </form>
-                        <ul class="list-group" id="todo-list">
-                            @foreach($tasks as $id => $task )
-                                <div class="input-group mb-3">
-                                    <li style="list-style: none; padding-left:20px;" class="form-control">
-                                        {{$task->description}}
-                                        <a href="{{route('user.delete',$task->id)}}" style="border:none; background:none; float: right; text-decoration:none;">&#x2715;</a>
-                                        <a href="{{route('user.edit',$task->id)}}" style="border:none; background:none; float: right; text-decoration:none;">&#128395;</a>
-                                    </li>
-                                </div>
-                            @endforeach
-                        </ul>
-                    </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    {{ __("You're logged in!") }}
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap JS Bundle (popper.js included) -->
-    <script src=
-"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
-      </script>
-    {{-- <script>
-        // Function to add a new task
-        function addTask(task) {
-            const todoList = document.getElementById("todo-list");
-            const li = document.createElement("li");
-            li.className = "list-group-item d-flex justify-content-between align-items-center";
-            li.innerHTML = `
-        <span class="task-text">${task}</span>
-        <input type="text" class="form-control edit-input" style="display: none;" value="${task}">
-        <div class="btn-group">
-          <button class="btn btn-danger btn-sm delete-btn">&#x2715;</button>
-          <button class="btn btn-primary btn-sm edit-btn">&#9998;</button>
-        </div>
-      `;
-            todoList.appendChild(li);
-        }
-
-        // Event listener for form submission
-        document.getElementById("todo-form").addEventListener("submit",
-            function (event) {
-                event.preventDefault();
-                const taskInput = document.getElementById("todo-input");
-                const task = taskInput.value.trim();
-                if (task !== "") {
-                    addTask(task);
-                    taskInput.value = "";
-                }
-            });
-
-        // Event listener for delete button click
-        document.getElementById("todo-list").addEventListener("click",
-            function (event) {
-                if (event.target.classList.contains("delete-btn")) {
-                    event.target.parentElement.parentElement.remove();
-                }
-            });
-
-        // Event listener for edit button click
-        document.getElementById("todo-list").addEventListener("click", function (event) {
-            if (event.target.classList.contains("edit-btn")) {
-                const taskText = event.target.parentElement
-                    .parentElement.querySelector(".task-text");
-                const editInput = event.target.parentElement
-                    .parentElement.querySelector(".edit-input");
-                if (taskText.style.display !== "none") {
-                    taskText.style.display = "none";
-                    editInput.style.display = "block";
-                    editInput.focus();
-                    event.target.innerHTML = "&#10004;";
-                } else {
-                    taskText.textContent = editInput.value;
-                    taskText.style.display = "inline";
-                    editInput.style.display = "none";
-                    event.target.innerHTML = "&#9998;";
-                }
-            }
-        });
-
-        // Add default tasks
-        //const defaultTasks = ["HTML", "CSS", "JS", "Bootstrap"];
-        //defaultTasks.forEach(task => addTask(task));
-    </script> --}}
-</body>
-
-</html>
+</x-app-layout>

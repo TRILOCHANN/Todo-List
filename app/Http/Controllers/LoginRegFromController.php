@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Mail\EmailModel;
 use App\Models\TodoList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 
 class LoginRegFromController extends Controller
@@ -26,12 +30,25 @@ class LoginRegFromController extends Controller
     //Store Login&Registration Data
     public function store(FormRequest $request)
     {
-        $storeValue = User::create([
+        $validateUser = User::create([
                 'name'=>$request->name,
                 'email'=>$request->email,
                 'password'=>$request->password,
         ]);
-        return redirect('/')->with('success','Successfully Registered');
+        event(new Registered($validateUser));
+
+        Auth::login($validateUser);
+        return redirect()->route('varification.notice');
+    }
+
+    public function varificationNotice(){
+        return view('auth.verify-email');
+    }
+
+    public function varificationVerify(EmailVerificationRequest $request){
+        $request->fulfill();
+        return redirect()->route('login')->with('Success','Successfully Register !');
+        return view('auth.verify-email');
     }
 
     //validation Loin
@@ -42,6 +59,8 @@ class LoginRegFromController extends Controller
         ]);
         if (Auth::attempt($credentials)) {
                 return redirect()->route('dashboard');
+        }else{
+                return redirect()->route('/');
         }
     }
     
@@ -67,7 +86,7 @@ class LoginRegFromController extends Controller
     //Logout page
     public function logout(){
         Auth::logout();
-        return view('login');
+        return redirect()->route('login');
     }
 
     //Delete Tasks

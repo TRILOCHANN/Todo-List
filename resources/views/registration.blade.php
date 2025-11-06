@@ -123,7 +123,7 @@
         </form>
         <div class="mt-3 text-center ">
             Have already an account?
-            <a href="{{route('loginform')}}"  >Login here</a>
+            <a href="{{route('login')}}"  >Login here</a>
         </div>
         <!-- Message Box for Alerts (Replaces alert() function) -->
         <div id="messageBox" class="alert mt-4 p-3 text-center" role="alert" style="display:none;"></div>
