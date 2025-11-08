@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class TodoList extends Model
 {
     use HasFactory;
-    protected $fillable = ['description','user_name'];
+    protected $fillable = ['description','user_id'];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

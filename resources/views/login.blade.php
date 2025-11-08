@@ -159,7 +159,9 @@
 
         </div>
         <!-- Message Box for Alerts (Replaces alert() function) -->
-        <div id="messageBox" class="alert mt-4 p-3 text-center" role="alert" style="display:none;"></div>
+        <div id="messageBox" class="alert mt-4 p-3 text-center" role="alert" style="display:none;">
+            
+        </div>
 
     </div>
     

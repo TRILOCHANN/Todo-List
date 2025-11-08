@@ -45,10 +45,10 @@ class LoginRegFromController extends Controller
         return view('auth.verify-email');
     }
 
-    public function varificationVerify(EmailVerificationRequest $request){
+    public function varificationVerify(EmailVerificationRequest  $request){
         $request->fulfill();
-        return redirect()->route('login')->with('Success','Successfully Register !');
-        return view('auth.verify-email');
+        return redirect()->route('login');
+        return view('auth.verify-email')->with('Success','Successfully Register !');
     }
 
     //validation Loin
@@ -58,18 +58,28 @@ class LoginRegFromController extends Controller
             'password'=>'required',
         ]);
         if (Auth::attempt($credentials)) {
-                return redirect()->route('dashboard');
-        }else{
-                return redirect()->route('/');
+        $user = Auth::user();
+
+        // Check if the user's email is verified
+        if (!$user->hasVerifiedEmail()) {
+            Auth::logout(); // Log out the user if not verified
+            return back()->with('fail', 'Please verify your email before logging in.');
         }
+
+        return redirect()->route('dashboard');
+        } else {
+            return back()->with('fail', 'Invalid credentials');
+        }
+
+
     }
     
     
     //Show all tasks in your todo 
     public function showdata()
     {
-        $tasks = TodoList::get();
-        return view('dashboard',compact('tasks'));
+        $data = TodoList::where('user_id',Auth::id())->get();
+        return view('dashboard',compact('data'));
     }
 
     //Store Tasks
@@ -78,7 +88,7 @@ class LoginRegFromController extends Controller
      
         TodoList::create([
                 'description'=>$request->AddNewTask,
-                
+                'user_id'=>Auth::id(),     
         ]);
         return back();
     }

@@ -46,7 +46,5 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    // public function todo_lists(){
-    //     return $this->hasOne(TodoList::class);
-    // }
+
 }
